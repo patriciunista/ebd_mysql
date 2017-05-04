@@ -238,11 +238,113 @@ create table INGRESSOS
 -- Mostrar el rànquing d'hospitals segons la proporció de llits per treballador.
     (h.sales) count(sales.llits) / treb.hosp
 
-    select p.SALA_COD, sum(s.QTAT_LLITS)
-    from PLANTILLA p inner join SALA s on s.SALA_COD = p.SALA_COD
-    group by p.SALA_COD, s.QTAT_LLITS;
+    
 
 -- Mostrar els hospitals on no hi ha cap doctor de cardiologia.
     select h.HOSPITAL_COD, h.NOM 
     from HOSPITAL h
     where h.HOSPITAL_COD not in (select HOSPITAL_COD from DOCTOR where ESPECIALITAT like "Cardiologia");
+
+
+
+
+"--- Exercici consultes general ---"
+
+"1. Esquema: EBD_GENERAL"
+
+create table DEPARTAMENTS (
+    NUM_DPT INT,
+    NOM CHAR(20), 
+    PLANTA INT, 
+    EDIFICI CHAR(30),
+    CIUTAT_DPT CHAR(20),
+    primary key (NUM_DPT)
+);
+
+create table PROJECTES (
+    NUM_PROJ INT, 
+    NOM_PROJ CHAR(10),
+    PRODUCTE CHAR(20),
+    PRESSUPOST INT,
+    primary key (NUM_PROJ)
+);
+
+create table EMPLEATS (
+    NUM_EMPL INT,
+    NOM_EMPL CHAR(30),
+    SOU INT,
+    CIUTAT_EMPL CHAR(20),
+    NUM_DPT INT,
+    NUM_PROJ INT,
+    primary key (NUM_EMPL),
+    foreign key (NUM_DPT) references DEPARTAMENTS(NUM_DPT),
+    foreign key (NUM_PROJ) references PROJECTES(NUM_PROJ)
+);
+
+"2. Inserts"
+-- DEPARTAMENTS
+insert into DEPARTAMENTS(NUM_DPT, NOM_DPT, PLANTA, EDIFICI, CIUTAT_DPT) values (1, "DIRECCIO", 10, "PAU", "CLARIS", "BARCELONA");
+insert into DEPARTAMENTS(NUM_DPT, NOM_DPT, PLANTA, EDIFICI, CIUTAT_DPT) values (2, "DIRECCIO", 8, "RIOS", "ROSAS", "MADRID");
+insert into DEPARTAMENTS(NUM_DPT, NOM_DPT, PLANTA, EDIFICI, CIUTAT_DPT) values (3, "MARKETING", 1, "PAU", "CLARIS", "BARCELONA");
+insert into DEPARTAMENTS(NUM_DPT, NOM_DPT, PLANTA, EDIFICI, CIUTAT_DPT) values (4, "MARKETING", 3, "RIOS", "ROSAS", "MADRID");
+insert into DEPARTAMENTS(NUM_DPT, NOM_DPT, PLANTA, EDIFICI, CIUTAT_DPT) values (5, "VENDES", 1, "MUNTANER", "BARCELONA");
+insert into DEPARTAMENTS(NUM_DPT, NOM_DPT, PLANTA, EDIFICI, CIUTAT_DPT) values (6, "VENDES", 1, "CASTELLANA", "MADRID");
+insert into DEPARTAMENTS(NUM_DPT, NOM_DPT, PLANTA, EDIFICI, CIUTAT_DPT) values (7, "VENDES", 3, "BLASCO", "IBAÑEZ", "VALENCIA");
+insert into DEPARTAMENTS(NUM_DPT, NOM_DPT, PLANTA, EDIFICI, CIUTAT_DPT) values (8, "VENDES", 1, "DE", "LA", "SIERPES", "SEVILLA");
+insert into DEPARTAMENTS(NUM_DPT, NOM_DPT, PLANTA, EDIFICI, CIUTAT_DPT) values (9, "ADMINISTRACIO", 7, "MUNTANER", "BARCELONA");
+
+
+-- PROJECTES
+insert into PROJECTES(NUM_PROJ, NOM_PROJ, PRODUCTE, PRESSUPOST) values (1, "BDTEL", "TELEVISIO", 60000);
+insert into PROJECTES(NUM_PROJ, NOM_PROJ, PRODUCTE, PRESSUPOST) values (2, "BDVID", "VIDEO", 30000);
+insert into PROJECTES(NUM_PROJ, NOM_PROJ, PRODUCTE, PRESSUPOST) values (3, "BDTEF", "TELEFON", 12000);
+insert into PROJECTES(NUM_PROJ, NOM_PROJ, PRODUCTE, PRESSUPOST) values (4, "BDCOM", "BLUE RAY", 120000);
+
+
+-- EMPLEATS
+insert into EMPLEATS(NUM_EMPL, NOM_EMPL, SOU, CIUTAT_EMPL, NUM_DPT, NUM_PROJ) values (1, "CARME", 2400, "MATARO", 1, 1);
+insert into EMPLEATS(NUM_EMPL, NOM_EMPL, SOU, CIUTAT_EMPL, NUM_DPT, NUM_PROJ) values (2, "EUGENIA", 2100, "TOLEDO", 2, 2);
+insert into EMPLEATS(NUM_EMPL, NOM_EMPL, SOU, CIUTAT_EMPL, NUM_DPT, NUM_PROJ) values (3, "JOSEP", 1500, "SITGES", 3, 1);
+insert into EMPLEATS(NUM_EMPL, NOM_EMPL, SOU, CIUTAT_EMPL, NUM_DPT, NUM_PROJ) values (4, "RICARDO", 1500, "MADRID", 4, 2);
+insert into EMPLEATS(NUM_EMPL, NOM_EMPL, SOU, CIUTAT_EMPL, NUM_DPT, NUM_PROJ) values (5, "EULALIA", 900, "BARCELONA", 5, 1);
+insert into EMPLEATS(NUM_EMPL, NOM_EMPL, SOU, CIUTAT_EMPL, NUM_DPT, NUM_PROJ) values (6, "MIQUEL", 750, "BADALONA", 5, 1);
+insert into EMPLEATS(NUM_EMPL, NOM_EMPL, SOU, CIUTAT_EMPL, NUM_DPT, NUM_PROJ) values (7, "MARIA", 1000, "MADRID", 6, 2);
+insert into EMPLEATS(NUM_EMPL, NOM_EMPL, SOU, CIUTAT_EMPL, NUM_DPT, NUM_PROJ) values (8, "ESTEBAN", 900, "MADRID", 6, 2);
+insert into EMPLEATS(NUM_EMPL, NOM_EMPL, SOU, CIUTAT_EMPL, NUM_DPT, NUM_PROJ) values (9, "LAURA", 750, "VALENCIA", 7, 3);
+insert into EMPLEATS(NUM_EMPL, NOM_EMPL, SOU, CIUTAT_EMPL, NUM_DPT, NUM_PROJ) values (10, "ANTONIO", 900, "SEVILLA", 8, 3);
+
+
+
+"3. Realitzar les seguents consultes"
+
+-- Obtenir el nom i el sou dels empleats amb num_dpt 1, 2 o 3 
+
+-- Obtenir els noms dels empleats del departament núm 5 i l’edifici on treballen 
+
+-- Obtenir els números i els noms dels departaments situats a Madrid, que tenen empleats que guanyen més de 1200€ 
+
+-- Obtenir per ordre alfabètic descendent els noms dels empleats que guanyen més de 1200€
+
+-- Obtenir per cada departament quin és el sou més gran. Concretament, cal llistar el número de departament i el sou més gran.
+
+-- Obtenir tots els números i els noms dels empleats que no són del departament número 1 i que treballen a Barcelona.
+
+-- Obtenir quantes persones dels diferents departaments treballen a la ciutat de Madrid
+
+-- Obtenir els noms dels empleats que guanyen més que l’empleat número 3.
+
+-- Obtenir el nom dels empleats que guanyen el sou més alt.
+
+-- Obtenir els números i els noms dels projectes que no tenen cap empleat assignat.
+
+
+
+
+
+
+
+
+
+
+
+
