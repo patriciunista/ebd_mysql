@@ -372,6 +372,59 @@ insert into EMPLEATS(NUM_EMPL, NOM_EMPL, SOU, CIUTAT_EMPL, NUM_DPT, NUM_PROJ) va
         select e.NUM_PROJ
         from EMPLEATS e
     );
+-- Obtenir els noms dels departaments que tenen empleats que treballen al projecte BDTEL.
+    select d.NUM_DPT, d.NOM 
+    from DEPARTAMENTS d inner join EMPLEATS e on d.NUM_DPT = e.NUM_DPT
+    where e.NUM_PROJ = 
+    (
+        select p.NUM_PROJ
+        from PROJECTES p
+        where p.NOM_PROJ like "BDTEL"
+    );
+-- Obtenir els noms dels empleats que no treballen en el projecte número 2
+    select e.NOM_EMPL
+    from EMPLEATS e inner join PROJECTES p on e.NUM_PROJ = p.NUM_PROJ
+    where e.NUM_PROJ != 2;
+-- Obtenir els números i els noms dels departaments que tenen 2 o més empleats en el projecte 1.
+    select d.NUM_DPT, d.NOM
+    from DEPARTAMENTS d inner join EMPLEATS e on d.NUM_DPT = e.NUM_DPT
+    where e.NUM_PROJ = 1
+    group by d.NUM_DPT
+    having count(e.NUM_EMPL) >= 2;
+-- Obtenir els números i els noms dels projectes que tenen assignats més de 2 empleats
+    select p.NUM_PROJ, p.NOM_PROJ
+    from PROJECTES p inner join EMPLEATS e on p.NUM_PROJ = e.NUM_PROJ
+    group by p.NUM_PROJ
+    having count(e.NUM_EMPL) > 2;
+-- Obtenir els productes que tenen assignats els empleats del departament número 1.
+    select p.PRODUCTE
+    from PROJECTES p inner join EMPLEATS e on p.NUM_PROJ = e.NUM_PROJ
+    where e.NUM_DPT = 1;
+-- Obtenir el nom del departament on treballa i el nom del projecte on està assignat l’empleat número 2.
+    select d.NOM, p.NOM_PROJ
+    from (EMPLEATS e left join PROJECTES p on e.NUM_PROJ = p.NUM_PROJ) inner join DEPARTAMENTS d on e.NUM_DPT = d.NUM_DPT
+    where e.NUM_EMPL = 2;
+-- Obtenir el número i el nom dels empleats que viuen a la mateixa ciutat on està situat el departament on treballen 
+    select e.NUM_EMPL, e.NOM_EMPL
+    from EMPLEATS e inner join DEPARTAMENTS d on e.NUM_DPT = d.NUM_DPT
+    where e.CIUTAT_EMPL like d.CIUTAT_DPT;
+-- Obtenir per cada projecte que tingui més d’un empleat treballant en el mateix edifici,  el número i nom del projecte i el nom de l’edifici.
+    select p.NUM_PROJ, p.NOM_PROJ, d.EDIFICI
+    from (PROJECTES p left join EMPLEATS e on p.NUM_PROJ = e.NUM_PROJ) inner join DEPARTAMENTS d on e.NUM_DPT = d.NUM_DPT
+    group by p.NUM_PROJ, d.EDIFICI
+    having count(e.NUM_EMPL) > 1;
+-- Obtenir els projectes amb un pressupost més petit que el pressupostat del projecte número 1. Concretament, es demana el número i el nom dels projecte i el sou promig dels empleats que hi estan assignats. 
+
+-- Obtenir el número i el nom dels projecte que tenen un pressupost més petit de 36000€ i que tots els empleats que hi estan assignats tenen un sou superior o igual a 1200€ 
+
+-- Obtenir els noms de les ciutats on hi viuen empleats però no hi ha cap departament. 
+
+-- Obtenir els departaments que tenen més empleats que el departament número 1. Concretament, es demana el número i el nom d’aquests departaments.
+
+-- Obtenir els departaments que no tenen cap empleat assignat i que estan situats a la ciutat de Barcelona. Concretament, es demana el número i el nom d’aquests departaments. 
+
+
+
 
 create table DEPARTAMENTS (
     NUM_DPT INT,
