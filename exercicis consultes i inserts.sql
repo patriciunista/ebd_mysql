@@ -283,15 +283,15 @@ create table EMPLEATS (
 
 "2. Inserts"
 -- DEPARTAMENTS
-insert into DEPARTAMENTS(NUM_DPT, NOM_DPT, PLANTA, EDIFICI, CIUTAT_DPT) values (1, "DIRECCIO", 10, "PAU", "CLARIS", "BARCELONA");
-insert into DEPARTAMENTS(NUM_DPT, NOM_DPT, PLANTA, EDIFICI, CIUTAT_DPT) values (2, "DIRECCIO", 8, "RIOS", "ROSAS", "MADRID");
-insert into DEPARTAMENTS(NUM_DPT, NOM_DPT, PLANTA, EDIFICI, CIUTAT_DPT) values (3, "MARKETING", 1, "PAU", "CLARIS", "BARCELONA");
-insert into DEPARTAMENTS(NUM_DPT, NOM_DPT, PLANTA, EDIFICI, CIUTAT_DPT) values (4, "MARKETING", 3, "RIOS", "ROSAS", "MADRID");
-insert into DEPARTAMENTS(NUM_DPT, NOM_DPT, PLANTA, EDIFICI, CIUTAT_DPT) values (5, "VENDES", 1, "MUNTANER", "BARCELONA");
-insert into DEPARTAMENTS(NUM_DPT, NOM_DPT, PLANTA, EDIFICI, CIUTAT_DPT) values (6, "VENDES", 1, "CASTELLANA", "MADRID");
-insert into DEPARTAMENTS(NUM_DPT, NOM_DPT, PLANTA, EDIFICI, CIUTAT_DPT) values (7, "VENDES", 3, "BLASCO", "IBAÑEZ", "VALENCIA");
-insert into DEPARTAMENTS(NUM_DPT, NOM_DPT, PLANTA, EDIFICI, CIUTAT_DPT) values (8, "VENDES", 1, "DE", "LA", "SIERPES", "SEVILLA");
-insert into DEPARTAMENTS(NUM_DPT, NOM_DPT, PLANTA, EDIFICI, CIUTAT_DPT) values (9, "ADMINISTRACIO", 7, "MUNTANER", "BARCELONA");
+insert into DEPARTAMENTS(NUM_DPT, NOM, PLANTA, EDIFICI, CIUTAT_DPT) values (1, "DIRECCIO", 10, "PAU CLARIS", "BARCELONA");
+insert into DEPARTAMENTS(NUM_DPT, NOM, PLANTA, EDIFICI, CIUTAT_DPT) values (2, "DIRECCIO", 8, "RIOS ROSAS", "MADRID");
+insert into DEPARTAMENTS(NUM_DPT, NOM, PLANTA, EDIFICI, CIUTAT_DPT) values (3, "MARKETING", 1, "PAU CLARIS", "BARCELONA");
+insert into DEPARTAMENTS(NUM_DPT, NOM, PLANTA, EDIFICI, CIUTAT_DPT) values (4, "MARKETING", 3, "RIOS ROSAS", "MADRID");
+insert into DEPARTAMENTS(NUM_DPT, NOM, PLANTA, EDIFICI, CIUTAT_DPT) values (5, "VENDES", 1, "MUNTANER", "BARCELONA");
+insert into DEPARTAMENTS(NUM_DPT, NOM, PLANTA, EDIFICI, CIUTAT_DPT) values (6, "VENDES", 1, "CASTELLANA", "MADRID");
+insert into DEPARTAMENTS(NUM_DPT, NOM, PLANTA, EDIFICI, CIUTAT_DPT) values (7, "VENDES", 3, "BLASCO IBAÑEZ", "VALENCIA");
+insert into DEPARTAMENTS(NUM_DPT, NOM, PLANTA, EDIFICI, CIUTAT_DPT) values (8, "VENDES", 1, "DE LA SIERPES", "SEVILLA");
+insert into DEPARTAMENTS(NUM_DPT, NOM, PLANTA, EDIFICI, CIUTAT_DPT) values (9, "ADMINISTRACIO", 7, "MUNTANER", "BARCELONA");
 
 
 -- PROJECTES
@@ -318,27 +318,89 @@ insert into EMPLEATS(NUM_EMPL, NOM_EMPL, SOU, CIUTAT_EMPL, NUM_DPT, NUM_PROJ) va
 "3. Realitzar les seguents consultes"
 
 -- Obtenir el nom i el sou dels empleats amb num_dpt 1, 2 o 3 
-
+    select e.NOM_EMPL, e.SOU
+    from EMPLEATS e
+    where e.NUM_DPT in (1, 2, 3);
 -- Obtenir els noms dels empleats del departament núm 5 i l’edifici on treballen 
-
+    select e.NOM_EMPL, d.EDIFICI
+    from EMPLEATS e inner join DEPARTAMENTS d on e.NUM_DPT = d.NUM_DPT
+    where e.NUM_DPT = 5;
 -- Obtenir els números i els noms dels departaments situats a Madrid, que tenen empleats que guanyen més de 1200€ 
-
+    select d.NUM_DPT, d.NOM
+    from EMPLEATS e left join DEPARTAMENTS d on e.NUM_DPT = d.NUM_DPT
+    where e.SOU > 1200 && d.CIUTAT_DPT like "MADRID";
 -- Obtenir per ordre alfabètic descendent els noms dels empleats que guanyen més de 1200€
-
+    select e.NOM_EMPL
+    from EMPLEATS e
+    where e.SOU > 1200
+    order by e.NOM_EMPL DESC;
 -- Obtenir per cada departament quin és el sou més gran. Concretament, cal llistar el número de departament i el sou més gran.
-
+    select d.NUM_DPT, max(e.SOU) as 'SOU MES GRAN'
+    from DEPARTAMENTS d inner join EMPLEATS e on d.NUM_DPT = e.NUM_DPT
+    group by d.NUM_DPT;
 -- Obtenir tots els números i els noms dels empleats que no són del departament número 1 i que treballen a Barcelona.
-
+    select e.NUM_EMPL, e.NOM_EMPL
+    from EMPLEATS e inner join DEPARTAMENTS d on e.NUM_DPT = d.NUM_DPT
+    where e.NUM_DPT != 1 && d.CIUTAT_DPT like "BARCELONA";
 -- Obtenir quantes persones dels diferents departaments treballen a la ciutat de Madrid
-
+    select d.NUM_DPT, d.NOM, count(e.NUM_EMPL) as 'NUM EMPLEATS'
+    from EMPLEATS e inner join DEPARTAMENTS d on e.NUM_DPT = d.NUM_DPT
+    where d.CIUTAT_DPT like "MADRID"
+    group by d.NUM_DPT;
 -- Obtenir els noms dels empleats que guanyen més que l’empleat número 3.
-
+    select e.NOM_EMPL
+    from EMPLEATS e
+    where e.SOU > 
+    (
+        select emp.SOU
+        from EMPLEATS emp
+        where emp.NUM_EMPL = 3
+    );
 -- Obtenir el nom dels empleats que guanyen el sou més alt.
-
+    select e.NOM_EMPL
+    from EMPLEATS e
+    where e.SOU = 
+    (
+        select max(emp.SOU)
+        from EMPLEATS emp
+    );
 -- Obtenir els números i els noms dels projectes que no tenen cap empleat assignat.
+    select p.NUM_PROJ, p.NOM_PROJ
+    from PROJECTES p
+    where p.NUM_PROJ not in 
+    (
+        select e.NUM_PROJ
+        from EMPLEATS e
+    );
 
+create table DEPARTAMENTS (
+    NUM_DPT INT,
+    NOM CHAR(20), 
+    PLANTA INT, 
+    EDIFICI CHAR(30),
+    CIUTAT_DPT CHAR(20),
+    primary key (NUM_DPT)
+);
 
+create table PROJECTES (
+    NUM_PROJ INT, 
+    NOM_PROJ CHAR(10),
+    PRODUCTE CHAR(20),
+    PRESSUPOST INT,
+    primary key (NUM_PROJ)
+);
 
+create table EMPLEATS (
+    NUM_EMPL INT,
+    NOM_EMPL CHAR(30),
+    SOU INT,
+    CIUTAT_EMPL CHAR(20),
+    NUM_DPT INT,
+    NUM_PROJ INT,
+    primary key (NUM_EMPL),
+    foreign key (NUM_DPT) references DEPARTAMENTS(NUM_DPT),
+    foreign key (NUM_PROJ) references PROJECTES(NUM_PROJ)
+);
 
 
 
