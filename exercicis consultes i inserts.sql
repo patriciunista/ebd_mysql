@@ -431,29 +431,82 @@ insert into EMPLEATS(NUM_EMPL, NOM_EMPL, SOU, CIUTAT_EMPL, NUM_DPT, NUM_PROJ) va
 -- Obtenir els noms de les ciutats on hi viuen empleats però no hi ha cap departament. 
 
 -- Obtenir els departaments que tenen més empleats que el departament número 1. Concretament, es demana el número i el nom d’aquests departaments.
-
+    select d.NUM_DPT, d.NOM
+    from DEPARTAMENTS d inner join EMPLEATS e on d.NUM_DPT = e.NUM_DPT
+    group by d.NUM_DPT, d.NOM
+    having count(e.NUM_EMPL) > (
+        select count(e.NUM_EMPL)
+        from EMPLEATS e inner join DEPARTAMENTS d on e.NUM_DPT = d.NUM_DPT
+        where d.NUM_DPT = 1;
+    );
 -- Obtenir els departaments que no tenen cap empleat assignat i que estan situats a la ciutat de Barcelona. Concretament, es demana el número i el nom d’aquests departaments. 
-
+    select d.NUM_DPT, d.NOM
+    from DEPARTAMENTS d left join EMPLEATS e on d.NUM_DPT = e.NUM_DPT
+    where d.CIUTAT_DPT like "Barcelona"
+    group by d.NUM_DPT, d.NOM
+    having count(e.NUM_EMPL) < 1;
 -- Obtenir els projectes que tenen assignats més de dos empleats de la mateixa ciutat. Concretament, es demana el número, el nom i el pressupost d’aquests projectes. 
-
+    select p.NUM_PROJ, p.NOM_PROJ, p.PRESSUPOST
+    from PROJECTES p inner join EMPLEATS e on p.NUM_PROJ = e.NUM_PROJ
+    group by e.NUM_PROJ, e.CIUTAT_EMPL
+    having count(e.NUM_EMPL) > 2;
 -- Obtenir el número, el nom i el sou dels empleats que tenen un sou més alt que el màxim dels sous dels empleats que tenen el número de departament més alt de la relació empleats. 
-
+    select e.NUM_EMPL, e.NOM_EMPL, e.SOU
+    from EMPLEATS e
+    group by e.NUM_DPT, e.NUM_EMPL
+    having e.SOU > ();
 -- Obtenir les dades de tots els empleats completada amb les dades del projecte al que estan assignats. 
+
 -- Obtenir els empleats que viuen a MADRID, que tenen un sou superior o igual a 1000€ i que estan assignats a un projecte que no és el projecte BDTEL. Es vol totes les dades dels empleats completada amb les dades del projecte al que estan assignats. 
-
+    select *
+    from EMPLEATS e inner join PROJECTES p on e.NUM_PROJ = p.NUM_PROJ
+    where (e.CIUTAT_EMPL like "Madrid") 
+        and (e.SOU >= 1000)
+        and (e.NUM_PROJ != (
+                select p.NUM_PROJ
+                from PROJECTES p
+                where p.NOM_PROJ like "BDTEL"
+            )
+        );
 -- Obtenir el número i nom dels departaments que tenen algun empleat que viu a MADRID 
-
+    select d.NUM_DPT, d.NOM
+    from DEPARTAMENTS d inner join EMPLEATS e on d.NUM_DPT = e.NUM_DPT
+    where e.CIUTAT_EMPL like "Madrid";
 -- Obtenir el número i nom dels departaments que tenen més de 5 empleats que viuen a MADRID 
+    select d.NUM_DPT, d.NOM
+    from DEPARTAMENTS d inner join EMPLEATS e on d.NUM_DPT = e.NUM_DPT
+    group by d.NUM_DPT
+    having count(e.CIUTAT_EMPL) > 5;
 -- Obtenir els departaments que tenen algun empleat que viu a MADRID. Concretament es demana el número i el nom dels departaments i el sou promig dels empleats que hi treballen. 
 
 -- Obtenir el número i nom dels departaments que tenen dos o més empleats que viuen a una mateixa ciutat. 
-
+    select d.NUM_DPT, d.NOM
+    from DEPARTAMENTS d inner join EMPLEATS e on d.NUM_DPT = e.NUM_DPT
+    group by d.NUM_DPT, e.CIUTAT_EMPL
+    having count(e.CIUTAT_EMPL) >= 2;
 -- Obtenir el número i nom dels departaments que tenen dos o més empleats que viuen a ciutat diferents. 
 
 -- Obtenir el número i nom dels departaments que no tenen cap empleat que visqui a Madrid 
-
+    /* Per la BBDD que tenim, aquesta consulta funciona, pero em sembla que no funcionaria si hi hagues un empleat de diferent ciutat en un mateix departament */
+    select d.NUM_DPT, d.NOM
+    from DEPARTAMENTS d inner join EMPLEATS e on d.NUM_DPT = e.NUM_DPT
+    where e.CIUTAT_EMPL not like "Madrid"
+    group by d.NUM_DPT;
+    /* Per aixo, he fet aquesta altra consulta, que aparentment dona el mateix resultat*/
+    select d.NUM_DPT, d.NOM
+    from DEPARTAMENTS d inner join EMPLEATS e on d.NUM_DPT = e.NUM_DPT
+    where d.NUM_DPT not in (
+        select e.NUM_DPT
+        from EMPLEATS e
+        where e.CIUTAT_EMPL like "Madrid"
+    )
+    group by d.NUM_DPT;
 -- Obtenir el número i nom dels departaments tals que tots els seus empleats viuen a MADRID. El resultat no ha d’incloure aquells departaments que no tenen cap empleat. 
-
+    select d.NUM_DPT, d.NOM
+    from DEPARTAMENTS d inner join EMPLEATS e on d.NUM_DPT = e.NUM_DPT
+    group by e.NUM_DPT, e.CIUTAT_EMPL
+    having (count(e.NUM_DPT) = count(e.CIUTAT_EMPL))
+        and (e.CIUTAT_EMPL like "Madrid");
 -- Incrementar en 3000€ el pressupost dels projectes que tenen algun empleat que treballa a Barcelona. 
 
 -- Incrementar en 30000€ el pressupost dels projectes que tenen 5 o més empleats que treballen a Barcelona. 
