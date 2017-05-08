@@ -414,9 +414,20 @@ insert into EMPLEATS(NUM_EMPL, NOM_EMPL, SOU, CIUTAT_EMPL, NUM_DPT, NUM_PROJ) va
     group by p.NUM_PROJ, d.EDIFICI
     having count(e.NUM_EMPL) > 1;
 -- Obtenir els projectes amb un pressupost més petit que el pressupostat del projecte número 1. Concretament, es demana el número i el nom dels projecte i el sou promig dels empleats que hi estan assignats. 
-
+    select p.NUM_PROJ, p.NOM_PROJ, avg(e.SOU)
+    from PROJECTES p left join EMPLEATS e on p.NUM_PROJ = e.NUM_PROJ
+    where p.PRESSUPOST < (
+        select p.PRESSUPOST
+        from PROJECTES p
+        where p.NUM_PROJ = 1;
+    )
+    group by p.NUM_PROJ;
 -- Obtenir el número i el nom dels projecte que tenen un pressupost més petit de 36000€ i que tots els empleats que hi estan assignats tenen un sou superior o igual a 1200€ 
-
+    select p.NUM_PROJ, p.NOM_PROJ
+    from PROJECTES p inner join EMPLEATS e on p.NUM_PROJ = e.NUM_PROJ
+    where p.PRESSUPOST > 36000
+    group by e.SOU
+    having e.SOU >= 1200;
 -- Obtenir els noms de les ciutats on hi viuen empleats però no hi ha cap departament. 
 
 -- Obtenir els departaments que tenen més empleats que el departament número 1. Concretament, es demana el número i el nom d’aquests departaments.
