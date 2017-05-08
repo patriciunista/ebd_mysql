@@ -423,7 +423,37 @@ insert into EMPLEATS(NUM_EMPL, NOM_EMPL, SOU, CIUTAT_EMPL, NUM_DPT, NUM_PROJ) va
 
 -- Obtenir els departaments que no tenen cap empleat assignat i que estan situats a la ciutat de Barcelona. Concretament, es demana el número i el nom d’aquests departaments. 
 
+-- Obtenir els projectes que tenen assignats més de dos empleats de la mateixa ciutat. Concretament, es demana el número, el nom i el pressupost d’aquests projectes. 
 
+-- Obtenir el número, el nom i el sou dels empleats que tenen un sou més alt que el màxim dels sous dels empleats que tenen el número de departament més alt de la relació empleats. 
+
+-- Obtenir les dades de tots els empleats completada amb les dades del projecte al que estan assignats. 
+-- Obtenir els empleats que viuen a MADRID, que tenen un sou superior o igual a 1000€ i que estan assignats a un projecte que no és el projecte BDTEL. Es vol totes les dades dels empleats completada amb les dades del projecte al que estan assignats. 
+
+-- Obtenir el número i nom dels departaments que tenen algun empleat que viu a MADRID 
+
+-- Obtenir el número i nom dels departaments que tenen més de 5 empleats que viuen a MADRID 
+-- Obtenir els departaments que tenen algun empleat que viu a MADRID. Concretament es demana el número i el nom dels departaments i el sou promig dels empleats que hi treballen. 
+
+-- Obtenir el número i nom dels departaments que tenen dos o més empleats que viuen a una mateixa ciutat. 
+
+-- Obtenir el número i nom dels departaments que tenen dos o més empleats que viuen a ciutat diferents. 
+
+-- Obtenir el número i nom dels departaments que no tenen cap empleat que visqui a Madrid 
+
+-- Obtenir el número i nom dels departaments tals que tots els seus empleats viuen a MADRID. El resultat no ha d’incloure aquells departaments que no tenen cap empleat. 
+
+-- Incrementar en 3000€ el pressupost dels projectes que tenen algun empleat que treballa a Barcelona. 
+
+-- Incrementar en 30000€ el pressupost dels projectes que tenen 5 o més empleats que treballen a Barcelona. 
+
+-- Incrementar en 30000€ el pressupost dels projectes que no tenen cap empleat que treballa a Barcelona 
+
+-- Incrementar en 30000 el pressupost dels projectes tals que tots els seus empleats treballen a Barcelona. No es vol incrementar el pressupost d’aquells projectes que no tenen cap empleat. 
+
+-- Esborrar els empleats que estan assignats als departaments situats a l’edifici Pau Claris de Barcelona. 
+
+-- Esborrar els departaments que no tenen cap empleat.
 
 
 create table DEPARTAMENTS (
