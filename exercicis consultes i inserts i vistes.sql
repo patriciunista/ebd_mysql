@@ -534,6 +534,59 @@ insert into EMPLEATS(NUM_EMPL, NOM_EMPL, SOU, CIUTAT_EMPL, NUM_DPT, NUM_PROJ) va
 -- Esborrar els departaments que no tenen cap empleat.
 
 
+
+"--- Exercici vistes ---"
+
+"1. Crea una vista VISTA_PRI de la taula departaments que contingui la clau primària i dues columnes més"
+-- Prova de fer un INSERT sobre aquesta vista, què passa? La taula origen de la vista es veu afectada? 
+
+-- Prova de fer un UPDATE sobre aquesta vista, què passa? 
+
+-- Prova de fer un DELETE sobre aquesta vista, què passa?
+
+"2. Crea una vista VISTA_NPRI de la taula departaments que contingui només dues columnes i que cap d'elles sigui la clau primària."
+-- Prova de fer un INSERT sobre aquesta vista, què passa? La taula origen de la vista es veu afectada? 
+
+-- Prova de fer un UPDATE sobre aquesta vista, què passa? perquè? 
+
+-- Prova de fer un DELETE sobre aquesta vista, què passa? perquè? 
+
+"3. Crea una vista VISTA_WCHECK, a partir de la taula Departaments, que contingui el codi departament, la ciutat i la planta. A més la vista ha de tenir activa la opció WITH CHECK OPTION, i ha de contenir només els departaments situats a Barcelona."
+
+-- Prova de fer un INSERT d'un departament situat a Barcelona sobre aquesta vista, què passa? La taula origen de la vista es veu afectada? 
+
+-- Prova de fer un INSERT d'un departament situat a Madrid sobre aquesta vista, què passa? perquè? 
+
+-- Prova de fer un UPDATE sobre aquesta vista canviant la Planta del Departament, què passa? perquè?
+
+-- Prova de fer un UPDATE sobre aquesta vista canviant la Ciutat del Departament, què passa? perquè?
+
+-- Prova de fer un DELETE sobre aquesta vista de qualsevol fila, què passa? perquè?
+
+"4. Fes que la columna NOM_DPT de la taula Departaments no pugui ser nul·la. Crea una vista VISTA_NULLS, de la taula Departaments on es seleccioni el Num_dpt, la Planta i la Ciutat_dpt."
+-- Prova de fer un INSERT sobre aquesta vista, què passa? 
+
+-- Prova de fer un UPDATE sobre aquesta vista, què passa? 
+
+-- Prova de fer un DELETE sobre aquesta vista, què passa?  
+
+"5. Fes que el camp Num_dpt sigui autoincrementable. Fes una vista VISTA_GRUP de la taula Departaments seleccionant Nom_dpt i Planta, agrupant per la planta."
+-- Prova de fer un INSERT sobre aquesta vista, què passa? perquè? 
+
+-- Prova de fer un UPDATE sobre aquesta vista, què passa? perquè? 
+
+-- Prova de fer un DELETE sobre aquesta vista, què passa? perquè?
+
+"6. Fes una vista VISTA_MTAULA, a partir de la taula Empleats, reemplaçant el Num_dpt i el Num_prj, pels seus respectius noms."
+-- Prova de fer un INSERT d'un nou empleat sobre aquesta vista, què passa? perquè? 
+
+-- Prova de fer un UPDATE sobre aquesta vista augmentant el sou d'un empleat, què passa? perquè? 
+
+-- Prova de fer un UPDATE sobre aquesta vista canviant el departament de l'empleat, què passa? perquè? 
+
+-- Prova de fer un DELETE sobre aquesta vista d'un empleat, què passa? perquè?
+
+
 create table DEPARTAMENTS (
     NUM_DPT INT,
     NOM CHAR(20), 
