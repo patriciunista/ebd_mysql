@@ -562,12 +562,3 @@ create table EMPLEATS (
     foreign key (NUM_DPT) references DEPARTAMENTS(NUM_DPT),
     foreign key (NUM_PROJ) references PROJECTES(NUM_PROJ)
 );
-
-
-
-
-
-
-
-
-
