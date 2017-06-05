@@ -538,34 +538,52 @@ insert into EMPLEATS(NUM_EMPL, NOM_EMPL, SOU, CIUTAT_EMPL, NUM_DPT, NUM_PROJ) va
 "--- Exercici vistes ---"
 
 "1. Crea una vista VISTA_PRI de la taula departaments que contingui la clau primària i dues columnes més"
+    create view VISTA_PRI as (select NUM_DPT, NOM, PLANTA from DEPARTAMENTS);
 -- Prova de fer un INSERT sobre aquesta vista, què passa? La taula origen de la vista es veu afectada? 
-
+    insert into VISTA_PRI VALUES(10, "VISTA", 5);
+    El insert es executat correctament. Si, es veu afectada.
 -- Prova de fer un UPDATE sobre aquesta vista, què passa? 
-
+    update VISTA_PRI set NOM="VISTA UPDATE" where NUM_DPT = 10;
+    El update es executat correctament.
 -- Prova de fer un DELETE sobre aquesta vista, què passa?
+    delete from VISTA_PRI where NUM_DPT = 10;
+    El delete es executat correctament.
 
 "2. Crea una vista VISTA_NPRI de la taula departaments que contingui només dues columnes i que cap d'elles sigui la clau primària."
+    create view VISTA_NPRI as (select NOM, PLANTA from DEPARTAMENTS);
 -- Prova de fer un INSERT sobre aquesta vista, què passa? La taula origen de la vista es veu afectada? 
-
+    insert into VISTA_NPRI VALUES("VISTA", 5);
+    No deixa fer el insert perque no tenim clau primaria i perque la clau primaria no es auto incremental.
 -- Prova de fer un UPDATE sobre aquesta vista, què passa? perquè? 
-
+    update VISTA_NPRI set NOM="VISTA UPDATE" where NOM like "MARKETING";
+    El update ha funcionat correctament. Ha trobat els camps que conicidien (perque es 1 a 1) i ha modificat els valors.
 -- Prova de fer un DELETE sobre aquesta vista, què passa? perquè? 
+    delete from VISTA_NPRI where NOM like "VISTA UPDATE";
+    El delete ens dona error, perque no tenim la clau primaria.
 
 "3. Crea una vista VISTA_WCHECK, a partir de la taula Departaments, que contingui el codi departament, la ciutat i la planta. A més la vista ha de tenir activa la opció WITH CHECK OPTION, i ha de contenir només els departaments situats a Barcelona."
-
+    create view VISTA_WCHECK as (select NUM_DPT, CIUTAT_DPT, PLANTA from DEPARTAMENTS where CIUTAT_DPT like "BARCELONA") WITH CHECK OPTION;
 -- Prova de fer un INSERT d'un departament situat a Barcelona sobre aquesta vista, què passa? La taula origen de la vista es veu afectada? 
-
+    insert into VISTA_WCHECK VALUES(13, "BARCELONA", 5);
+    La sentencia es executada i la taula origen es veu afectada.
 -- Prova de fer un INSERT d'un departament situat a Madrid sobre aquesta vista, què passa? perquè? 
-
+    insert into VISTA_WCHECK VALUES(14,"MADRID", 5);
+    Falla perque ha comprovat que insertem un nom i no es igual a BARCELONA.
 -- Prova de fer un UPDATE sobre aquesta vista canviant la Planta del Departament, què passa? perquè?
-
+    update VISTA_WCHECK set PLANTA=6;
+    El update es executat i afecta a totes les files.
 -- Prova de fer un UPDATE sobre aquesta vista canviant la Ciutat del Departament, què passa? perquè?
-
+    update VISTA_WCHECK set CIUTAT_DPT="MADRID";
+    El update no es pot executar per el check option.
 -- Prova de fer un DELETE sobre aquesta vista de qualsevol fila, què passa? perquè?
+    delete from VISTA_WCHECK where PLANTA=6 and NUM_DPT = 13;
+    Es pot eliminar perque especifiquem la clau primaria.
 
 "4. Fes que la columna NOM_DPT de la taula Departaments no pugui ser nul·la. Crea una vista VISTA_NULLS, de la taula Departaments on es seleccioni el Num_dpt, la Planta i la Ciutat_dpt."
+    ALTER TABLE DEPARTAMENTS MODIFY NUM_DPT INT NOT NULL;
+    create view VISTA_NULLS as (select NUM_DPT, PLANTA, CIUTAT_DPT from DEPARTAMENTS);
 -- Prova de fer un INSERT sobre aquesta vista, què passa? 
-
+    
 -- Prova de fer un UPDATE sobre aquesta vista, què passa? 
 
 -- Prova de fer un DELETE sobre aquesta vista, què passa?  
