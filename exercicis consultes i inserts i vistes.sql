@@ -522,7 +522,7 @@ insert into EMPLEATS(NUM_EMPL, NOM_EMPL, SOU, CIUTAT_EMPL, NUM_DPT, NUM_PROJ) va
     having (count(e.NUM_DPT) = count(e.CIUTAT_EMPL))
         and (e.CIUTAT_EMPL like "Madrid");
 -- Incrementar en 3000€ el pressupost dels projectes que tenen algun empleat que treballa a Barcelona. 
-
+    
 -- Incrementar en 30000€ el pressupost dels projectes que tenen 5 o més empleats que treballen a Barcelona. 
 
 -- Incrementar en 30000€ el pressupost dels projectes que no tenen cap empleat que treballa a Barcelona 
@@ -583,18 +583,28 @@ insert into EMPLEATS(NUM_EMPL, NOM_EMPL, SOU, CIUTAT_EMPL, NUM_DPT, NUM_PROJ) va
     ALTER TABLE DEPARTAMENTS MODIFY NUM_DPT INT NOT NULL;
     create view VISTA_NULLS as (select NUM_DPT, PLANTA, CIUTAT_DPT from DEPARTAMENTS);
 -- Prova de fer un INSERT sobre aquesta vista, què passa? 
-    
+    insert into VISTA_NULLS values (15, 3, "BARCELONA");
+    Funciona.
 -- Prova de fer un UPDATE sobre aquesta vista, què passa? 
-
+    update VISTA_NULLS set NUM_DPT= 13 where NUM_DPT=15;
+    Ha funcionat.
 -- Prova de fer un DELETE sobre aquesta vista, què passa?  
-
+    delete from VISTA_NULLS where NUM_DPT=13;
+    També ha funcionat.
 "5. Fes que el camp Num_dpt sigui autoincrementable. Fes una vista VISTA_GRUP de la taula Departaments seleccionant Nom_dpt i Planta, agrupant per la planta."
+    ALTER TABLE EMPLEATS DROP FOREIGN KEY EMPLEATS_ibfk_1;
+    ALTER TABLE DEPARTAMENTS MODIFY NUM_DPT INT NOT NULL AUTO_INCREMENT;
+    ALTER TABLE EMPLEATS ADD FOREIGN KEY (NUM_DPT) REFERENCES DEPARTAMENTS(NUM_DPT);
+    CREATE VIEW VISTA_GRUP as (select NOM, PLANTA FROM DEPARTAMENTS GROUP BY PLANTA, NOM);
 -- Prova de fer un INSERT sobre aquesta vista, què passa? perquè? 
-
+    insert into VISTA_GRUP values ("MARKETING", 4);
+    No es poden fer insert.
 -- Prova de fer un UPDATE sobre aquesta vista, què passa? perquè? 
-
+    update VISTA_GRUP set NOM="MARKETING", PLANTA=4 where PLANTA = 3;
+    No es pot fer update.
 -- Prova de fer un DELETE sobre aquesta vista, què passa? perquè?
-
+    delete from VISTA_GRUP where PLANTA = 3;
+    No es pot fer delete.
 "6. Fes una vista VISTA_MTAULA, a partir de la taula Empleats, reemplaçant el Num_dpt i el Num_prj, pels seus respectius noms."
 -- Prova de fer un INSERT d'un nou empleat sobre aquesta vista, què passa? perquè? 
 
